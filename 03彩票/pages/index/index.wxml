@@ -1,0 +1,74 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">双色球中奖查询</text>
+    <text class="subtitle">输入期数和号码查询中奖结果</text>
+  </view>
+
+  <view class="form-section">
+    <!-- 期数输入 -->
+    <view class="input-group">
+      <text class="label">期数:</text>
+      <input class="input" placeholder="如：2024001" value="{{period}}" bindinput="onPeriodChange" type="text" />
+    </view>
+
+    <!-- 红球输入 -->
+    <view class="input-group">
+      <text class="label">红球:</text>
+      <view class="number-inputs">
+        <input class="number-input red" placeholder="01" value="{{redBalls[0]}}" bindinput="onRedBallChange" data-index="0" maxlength="2" type="number" />
+        <input class="number-input red" placeholder="02" value="{{redBalls[1]}}" bindinput="onRedBallChange" data-index="1" maxlength="2" type="number" />
+        <input class="number-input red" placeholder="03" value="{{redBalls[2]}}" bindinput="onRedBallChange" data-index="2" maxlength="2" type="number" />
+        <input class="number-input red" placeholder="04" value="{{redBalls[3]}}" bindinput="onRedBallChange" data-index="3" maxlength="2" type="number" />
+        <input class="number-input red" placeholder="05" value="{{redBalls[4]}}" bindinput="onRedBallChange" data-index="4" maxlength="2" type="number" />
+        <input class="number-input red" placeholder="06" value="{{redBalls[5]}}" bindinput="onRedBallChange" data-index="5" maxlength="2" type="number" />
+      </view>
+    </view>
+
+    <!-- 蓝球输入 -->
+    <view class="input-group">
+      <text class="label">蓝球:</text>
+      <view class="number-inputs">
+        <input class="number-input blue" placeholder="01" value="{{blueBall}}" bindinput="onBlueBallChange" maxlength="2" type="number" />
+      </view>
+    </view>
+
+    <!-- 查询按钮 -->
+    <button class="btn-query btn-primary" bindtap="queryResult" disabled="{{loading}}">
+      {{loading ? '查询中...' : '查询中奖结果'}}
+    </button>
+  </view>
+
+  <!-- 结果显示 -->
+  <view class="result-section" wx:if="{{showResult}}">
+    <view class="result-header">
+      <text class="result-title">查询结果</text>
+    </view>
+    
+    <view class="lottery-info" wx:if="{{lotteryData}}">
+      <text class="period-text">第{{lotteryData.period}}期开奖号码</text>
+      <view class="winning-numbers">
+        <view class="red-numbers">
+          <text class="number red" wx:for="{{lotteryData.redBalls}}" wx:key="index">{{item}}</text>
+        </view>
+        <view class="blue-number">
+          <text class="number blue">{{lotteryData.blueBall}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="check-result">
+      <text class="result-text {{resultClass}}">{{resultText}}</text>
+      <text class="detail-text" wx:if="{{detailText}}">{{detailText}}</text>
+    </view>
+  </view>
+
+  <!-- 使用说明 -->
+  <view class="help-section">
+    <text class="help-title">使用说明:</text>
+    <text class="help-text">1. 输入期数（如2024001）</text>
+    <text class="help-text">2. 输入6个红球号码（01-33）</text>
+    <text class="help-text">3. 输入1个蓝球号码（01-16）</text>
+    <text class="help-text">4. 点击查询按钮获取结果</text>
+  </view>
+</view> 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋游戏</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1 class="game-title">五子棋</h1>
+            <p class="game-author"><a href="https://github.com/hengruiyun" target="_blank">作者: 267278466@qq.com</a></p>
+            <div class="game-info">
+                <div class="player-info">
+                    <div class="player human-player active">
+                        <div class="player-icon black-stone"></div>
+                        <span>玩家</span>
+                    </div>
+                    <div class="player ai-player">
+                        <div class="player-icon white-stone"></div>
+                        <span>电脑</span>
+                    </div>
+                </div>
+                <div class="game-status">
+                    <span id="status-text">玩家先行</span>
+                </div>
+                <div class="difficulty-selector">
+                    <label for="difficulty-select">难度：</label>
+                    <select id="difficulty-select" title="选择AI难度">
+                        <option value="easy">简单</option>
+                        <option value="medium" selected>中等</option>
+                        <option value="hard">困难</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+        
+        <main class="game-main">
+            <div class="board-container">
+                <div id="game-board" class="game-board"></div>
+                <div class="board-shadow"></div>
+            </div>
+            
+            <div class="game-controls">
+                <button id="restart-btn" class="control-btn restart-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    重新开始
+                </button>
+                <button id="undo-btn" class="control-btn undo-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>
+                    </svg>
+                    悔棋
+                </button>
+                <button id="hint-btn" class="control-btn hint-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    提示
+                </button>
+            </div>
+        </main>
+        
+        <div id="game-result" class="game-result hidden">
+            <div class="result-content">
+                <div class="result-icon">
+                    <div class="winner-stone"></div>
+                </div>
+                <h2 id="result-text" class="result-text"></h2>
+                <button id="new-game-btn" class="new-game-btn">开始新游戏</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

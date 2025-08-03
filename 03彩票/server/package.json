@@ -1,0 +1,29 @@
+{
+  "name": "lottery-query-server",
+  "version": "1.0.0",
+  "description": "双色球查询后端代理服务器",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lottery",
+    "双色球",
+    "福彩",
+    "proxy",
+    "miniprogram"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+} 

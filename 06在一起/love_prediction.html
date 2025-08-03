@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情缘预测师 - 缘分天定</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .person-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .person-section::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            border-radius: 15px;
+            z-index: -1;
+        }
+
+        .person-title {
+            text-align: center;
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .calculate-btn {
+            grid-column: 1 / -1;
+            justify-self: center;
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        .result-container {
+            padding: 40px;
+            background: #f8f9fa;
+            display: none;
+        }
+
+        .result-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-left: 4px solid #ff6b6b;
+            padding-left: 15px;
+        }
+
+        .score-display {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff6b6b 0deg, #ffa726 var(--angle), #e0e0e0 var(--angle));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .score-inner {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .score-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .detail-value {
+            color: #333;
+        }
+
+        .conclusion {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .person-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ 情缘预测师 ✨</h1>
+            <p>基于天干地支、星座奥秘与五行玄学的缘分预测</p>
+            <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">
+                <a href="https://github.com/hengruiyun" target="_blank" rel="noopener" style="color: white; text-decoration: underline;">作者: 267278466@qq.com</a>
+            </p>
+        </div>
+
+        <div class="form-container">
+            <div class="person-section">
+                <div class="person-title">💖 第一位有缘人</div>
+                <div class="input-group">
+                    <label for="name1">姓名</label>
+                    <input type="text" id="name1" placeholder="请输入姓名">
+                </div>
+                <div class="input-group">
+                    <label for="birth1">出生日期</label>
+                    <input type="date" id="birth1">
+                </div>
+            </div>
+
+            <div class="person-section">
+                <div class="person-title">💝 第二位有缘人</div>
+                <div class="input-group">
+                    <label for="name2">姓名</label>
+                    <input type="text" id="name2" placeholder="请输入姓名">
+                </div>
+                <div class="input-group">
+                    <label for="birth2">出生日期</label>
+                    <input type="date" id="birth2">
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateCompatibility()">
+                🔮 测算缘分天定
+            </button>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <div class="result-card">
+                <div class="result-title">🌟 综合缘分指数</div>
+                <div class="score-display">
+                    <div class="score-circle" id="scoreCircle">
+                        <div class="score-inner">
+                            <div class="score-number" id="totalScore">0</div>
+                            <div class="score-label">分</div>
+                        </div>
+                    </div>
+                    <div id="compatibilityLevel"></div>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-title">📊 详细分析</div>
+                <div class="detail-item">
+                    <span class="detail-label">天干地支匹配度:</span>
+                    <span class="detail-value" id="ganzhiScore">0%</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">星座契合度:</span>
+                    <span class="detail-value" id="constellationScore">0%</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">五行和谐度:</span>
+                    <span class="detail-value" id="wuxingScore">0%</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">预计相伴岁月:</span>
+                    <span class="detail-value" id="yearsValue">0年</span>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-title">🔍 命理解析</div>
+                <div id="analysis"></div>
+            </div>
+
+            <div class="conclusion" id="conclusion">
+                正在为您解读天机...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 天干地支对照表
+        const tianGan = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+        const diZhi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+        
+        // 五行对照表
+        const wuxingMap = {
+            '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
+            '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
+            '子': '水', '丑': '土', '寅': '木', '卯': '木', '辰': '土',
+            '巳': '火', '午': '火', '未': '土', '申': '金', '酉': '金',
+            '戌': '土', '亥': '水'
+        };
+
+        // 姓名五行字典（简化版）
+        const nameWuxing = {
+            '金': ['鑫', '钰', '铭', '锐', '钢', '铁', '银', '金', '铜', '锋', '钊', '钧', '钟', '铃'],
+            '木': ['林', '森', '树', '松', '柏', '杨', '柳', '梅', '兰', '竹', '菊', '花', '草', '莲'],
+            '水': ['海', '河', '江', '湖', '波', '涛', '洋', '泉', '溪', '雨', '雪', '冰', '霜', '露'],
+            '火': ['炎', '焰', '烨', '辉', '阳', '晖', '光', '明', '亮', '灿', '煜', '熠', '烁', '焕'],
+            '土': ['坤', '埔', '坚', '城', '墙', '地', '山', '岭', '峰', '岩', '石', '田', '园', '圃']
+        };
+
+        // 星座日期范围
+        const constellations = [
+            {name: '水瓶座', start: [1, 20], end: [2, 18], element: '风'},
+            {name: '双鱼座', start: [2, 19], end: [3, 20], element: '水'},
+            {name: '白羊座', start: [3, 21], end: [4, 19], element: '火'},
+            {name: '金牛座', start: [4, 20], end: [5, 20], element: '土'},
+            {name: '双子座', start: [5, 21], end: [6, 21], element: '风'},
+            {name: '巨蟹座', start: [6, 22], end: [7, 22], element: '水'},
+            {name: '狮子座', start: [7, 23], end: [8, 22], element: '火'},
+            {name: '处女座', start: [8, 23], end: [9, 22], element: '土'},
+            {name: '天秤座', start: [9, 23], end: [10, 23], element: '风'},
+            {name: '天蝎座', start: [10, 24], end: [11, 22], element: '水'},
+            {name: '射手座', start: [11, 23], end: [12, 21], element: '火'},
+            {name: '摩羯座', start: [12, 22], end: [1, 19], element: '土'}
+        ];
+
+        // 获取天干地支
+        function getGanZhi(year) {
+            const ganIndex = (year - 4) % 10;
+            const zhiIndex = (year - 4) % 12;
+            return {
+                gan: tianGan[ganIndex],
+                zhi: diZhi[zhiIndex],
+                ganWuxing: wuxingMap[tianGan[ganIndex]],
+                zhiWuxing: wuxingMap[diZhi[zhiIndex]]
+            };
+        }
+
+        // 获取星座
+        function getConstellation(month, day) {
+            for (let constellation of constellations) {
+                if (constellation.name === '摩羯座') {
+                    if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) {
+                        return constellation;
+                    }
+                } else {
+                    const [startMonth, startDay] = constellation.start;
+                    const [endMonth, endDay] = constellation.end;
+                    if ((month === startMonth && day >= startDay) || 
+                        (month === endMonth && day <= endDay)) {
+                        return constellation;
+                    }
+                }
+            }
+            return constellations[0]; // 默认返回水瓶座
+        }
+
+        // 计算姓名五行
+        function getNameWuxing(name) {
+            const wuxingCount = {金: 0, 木: 0, 水: 0, 火: 0, 土: 0};
+            
+            for (let char of name) {
+                for (let [element, chars] of Object.entries(nameWuxing)) {
+                    if (chars.includes(char)) {
+                        wuxingCount[element]++;
+                        break;
+                    }
+                }
+            }
+            
+            // 找出最多的五行
+            let maxElement = '土'; // 默认土
+            let maxCount = 0;
+            for (let [element, count] of Object.entries(wuxingCount)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    maxElement = element;
+                }
+            }
+            
+            return maxElement;
+        }
+
+        // 五行相生相克关系
+        function wuxingCompatibility(element1, element2) {
+            const shengMap = {
+                '金': '水', '水': '木', '木': '火', '火': '土', '土': '金'
+            };
+            const keMap = {
+                '金': '木', '木': '土', '土': '水', '水': '火', '火': '金'
+            };
+            
+            if (element1 === element2) return 85; // 同类相吸
+            if (shengMap[element1] === element2 || shengMap[element2] === element1) return 90; // 相生
+            if (keMap[element1] === element2 || keMap[element2] === element1) return 45; // 相克
+            return 70; // 中性
+        }
+
+        // 星座兼容性
+        function constellationCompatibility(const1, const2) {
+            const element1 = const1.element;
+            const element2 = const2.element;
+            
+            if (element1 === element2) return 85;
+            
+            const compatible = {
+                '火': ['风'],
+                '土': ['水'],
+                '风': ['火'],
+                '水': ['土']
+            };
+            
+            if (compatible[element1] && compatible[element1].includes(element2)) return 90;
+            if (compatible[element2] && compatible[element2].includes(element1)) return 90;
+            
+            return 65;
+        }
+
+        // 主计算函数
+        function calculateCompatibility() {
+            const name1 = document.getElementById('name1').value.trim();
+            const name2 = document.getElementById('name2').value.trim();
+            const birth1 = document.getElementById('birth1').value;
+            const birth2 = document.getElementById('birth2').value;
+
+            if (!name1 || !name2 || !birth1 || !birth2) {
+                alert('请填写完整信息');
+                return;
+            }
+
+            const date1 = new Date(birth1);
+            const date2 = new Date(birth2);
+            
+            // 获取年份天干地支
+            const ganzhi1 = getGanZhi(date1.getFullYear());
+            const ganzhi2 = getGanZhi(date2.getFullYear());
+            
+            // 获取星座
+            const constellation1 = getConstellation(date1.getMonth() + 1, date1.getDate());
+            const constellation2 = getConstellation(date2.getMonth() + 1, date2.getDate());
+            
+            // 获取姓名五行
+            const nameWuxing1 = getNameWuxing(name1);
+            const nameWuxing2 = getNameWuxing(name2);
+            
+            // 计算各项分数
+            const ganzhiScore = Math.round((
+                wuxingCompatibility(ganzhi1.ganWuxing, ganzhi2.ganWuxing) +
+                wuxingCompatibility(ganzhi1.zhiWuxing, ganzhi2.zhiWuxing)
+            ) / 2);
+            
+            const constellationScore = constellationCompatibility(constellation1, constellation2);
+            
+            const wuxingScore = wuxingCompatibility(nameWuxing1, nameWuxing2);
+            
+            // 计算相伴岁月（基于五行和年份差异）
+            const ageDiff = Math.abs(date1.getFullYear() - date2.getFullYear());
+            const baseYears = wuxingScore;
+            const yearsValue = Math.round(baseYears - ageDiff * 0.5 + Math.random() * 10);
+            
+            // 综合分数
+            const totalScore = Math.round((ganzhiScore + constellationScore + wuxingScore) / 3);
+            
+            // 显示结果
+            displayResults({
+                totalScore,
+                ganzhiScore,
+                constellationScore,
+                wuxingScore,
+                yearsValue: Math.max(yearsValue, 1),
+                name1,
+                name2,
+                constellation1: constellation1.name,
+                constellation2: constellation2.name,
+                ganzhi1: ganzhi1.gan + ganzhi1.zhi,
+                ganzhi2: ganzhi2.gan + ganzhi2.zhi,
+                nameWuxing1,
+                nameWuxing2
+            });
+        }
+
+        function displayResults(results) {
+            // 显示结果容器
+            document.getElementById('resultContainer').style.display = 'block';
+            
+            // 设置总分
+            document.getElementById('totalScore').textContent = results.totalScore;
+            
+            // 设置分数圆环
+            const angle = (results.totalScore / 100) * 360;
+            document.getElementById('scoreCircle').style.setProperty('--angle', angle + 'deg');
+            
+            // 设置各项分数
+            document.getElementById('ganzhiScore').textContent = results.ganzhiScore + '%';
+            document.getElementById('constellationScore').textContent = results.constellationScore + '%';
+            document.getElementById('wuxingScore').textContent = results.wuxingScore + '%';
+            document.getElementById('yearsValue').textContent = results.yearsValue + '年';
+            
+            // 设置兼容性等级
+            let level = '';
+            let levelColor = '';
+            if (results.totalScore >= 90) {
+                level = '天造地设 💖';
+                levelColor = '#ff6b6b';
+            } else if (results.totalScore >= 80) {
+                level = '天作之合 💕';
+                levelColor = '#ffa726';
+            } else if (results.totalScore >= 70) {
+                level = '情投意合 💗';
+                levelColor = '#42a5f5';
+            } else if (results.totalScore >= 60) {
+                level = '缘分不浅 💜';
+                levelColor = '#ab47bc';
+            } else {
+                level = '需要努力 💙';
+                levelColor = '#66bb6a';
+            }
+            
+            document.getElementById('compatibilityLevel').innerHTML = 
+                `<div style="color: ${levelColor}; font-size: 1.2rem; font-weight: bold;">${level}</div>`;
+            
+            // 设置分析
+            const analysis = `
+                <div style="line-height: 1.8;">
+                    <p><strong>${results.name1}</strong> (${results.constellation1}，${results.ganzhi1}年，${results.nameWuxing1}命) 与 
+                    <strong>${results.name2}</strong> (${results.constellation2}，${results.ganzhi2}年，${results.nameWuxing2}命) 的缘分解析：</p>
+                    <br>
+                    <p>🌟 <strong>天干地支配对</strong>：两人的生年天干地支五行${results.ganzhiScore >= 80 ? '高度契合' : results.ganzhiScore >= 60 ? '较为和谐' : '需要磨合'}，
+                    ${results.ganzhiScore >= 80 ? '天生一对，命中注定' : results.ganzhiScore >= 60 ? '相处融洽，互补性强' : '需要相互理解包容'}。</p>
+                    <br>
+                    <p>⭐ <strong>星座匹配</strong>：${results.constellation1}与${results.constellation2}的组合
+                    ${results.constellationScore >= 80 ? '极其理想，性格互补完美' : results.constellationScore >= 60 ? '比较协调，能够相互理解' : '存在差异，需要更多沟通'}。</p>
+                    <br>
+                    <p>🍃 <strong>五行调和</strong>：姓名五行显示两人的能量场
+                    ${results.wuxingScore >= 80 ? '高度融合，相生相助' : results.wuxingScore >= 60 ? '比较平衡，互相促进' : '需要调和，建议多培养共同兴趣'}。</p>
+                </div>
+            `;
+            document.getElementById('analysis').innerHTML = analysis;
+            
+            // 设置结论
+            let conclusion = '';
+            if (results.totalScore >= 85) {
+                conclusion = `🎉 恭喜！${results.name1}与${results.name2}是天造地设的一对，缘分深厚，建议珍惜这份难得的感情。预测你们将携手${results.yearsValue}年，共度美好时光！`;
+            } else if (results.totalScore >= 70) {
+                conclusion = `💕 ${results.name1}与${results.name2}缘分不错，虽有小小差异，但正是这些不同让你们的爱情更加精彩。用心经营，预计可相伴${results.yearsValue}年！`;
+            } else if (results.totalScore >= 55) {
+                conclusion = `💗 ${results.name1}与${results.name2}需要更多的理解和沟通，爱情需要双方共同努力。只要真心相待，同样可以拥有${results.yearsValue}年的美好时光。`;
+            } else {
+                conclusion = `💙 ${results.name1}与${results.name2}的组合充满挑战，但真爱能够克服一切困难。建议多花时间了解对方，培养共同兴趣，相信努力${results.yearsValue}年后会有美好结果。`;
+            }
+            
+            document.getElementById('conclusion').textContent = conclusion;
+            
+            // 平滑滚动到结果
+            document.getElementById('resultContainer').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
+    <!-- 底部免责声明 -->
+    <div style="background: rgba(0, 0, 0, 0.8); color: white; text-align: center; padding: 20px; font-size: 0.9rem; line-height: 1.6;">
+        <p>⚠️ <strong>重要提示</strong> ⚠️</p>
+        <p>本程序仅为娱乐游戏，预测结果不具有任何科学依据，请勿当真！</p>
+        <p>感情的经营需要双方的真心付出与相互理解，真正的幸福掌握在自己手中。</p>
+        <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">
+            This is for entertainment purposes only. Please do not take the results seriously.
+        </p>
+    </div>
+</body>
+</html>
